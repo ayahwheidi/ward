@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>لوحة تحكم ورد</title>
+<meta name="theme-color" content="#D9809A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--p:#D9809A;--p-600:#c96c87;--p-700:#8f3a55;--p-ink:#8f3a55;--p-400:#e59fb3;--p-300:#f0bccb;--p-200:#f5d3dd;--p-100:#f8e3e9;--p-50:#fbf1f4;--bg:#fdf8f9;--ink:#2a1a20;--ink-2:#5a4950;--muted:#7a6c71;--line:#eedde2;--on-p:#fff;--ease:cubic-bezier(.2,.8,.2,1)}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;font-family:"Tajawal",system-ui,Tahoma,sans-serif;background:var(--bg);color:var(--ink);font-size:15.5px;line-height:1.6}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--p-ink);outline-offset:2px;border-radius:8px}
+.ico{width:20px;height:20px;flex:none}
+.btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;min-height:42px;padding:0 16px;border-radius:12px;border:1px solid var(--line);background:#fff;cursor:pointer;font-weight:700;text-decoration:none;transition:background .2s,transform .15s,box-shadow .2s;white-space:nowrap}
+.btn:hover{background:var(--p-50)}
+.btn:active{transform:scale(.98)}
+.btn-p{background:var(--p);border-color:var(--p);color:var(--on-p)}
+.btn-p:hover{background:var(--p-600)}
+.btn-d{color:#b42318}
+.btn-d:hover{background:#fef3f2}
+.btn-call{background:var(--ink);border-color:var(--ink);color:#fff}
+.btn-call:hover{background:#3a2830}
+.btn-sm{min-height:34px;padding:0 10px;font-size:14px;border-radius:10px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* تسجيل الدخول */
+#login{min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 20% 10%,var(--p-200),transparent 50%),radial-gradient(circle at 90% 90%,var(--p-100),transparent 50%),var(--bg)}
+.login-card{width:min(420px,100%);background:#fff;border:1px solid var(--line);border-radius:28px;padding:36px 30px;box-shadow:0 30px 60px -30px var(--p-700);text-align:center;animation:up .6s var(--ease)}
+@keyframes up{from{opacity:0;transform:translateY(20px)}}
+.lock{width:84px;height:84px;margin:0 auto 14px;border-radius:26px;background:linear-gradient(135deg,var(--p-400),var(--p-700));color:#fff;display:grid;place-items:center;box-shadow:0 16px 30px -12px var(--p)}
+.lock .ico{width:40px;height:40px}
+.lock.shake{animation:shake .45s}
+@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.lock.ok{animation:okp .5s}
+@keyframes okp{50%{transform:scale(1.12) rotate(-6deg)}}
+.login-card h1{font-family:"Reem Kufi",serif;margin:0;font-size:30px}
+.login-card p{color:var(--muted);margin:4px 0 22px}
+.pw{position:relative}
+.pw input{width:100%;border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;min-height:54px;font-size:17px;direction:ltr;text-align:right}
+.pw input:focus{outline:none;border-color:var(--p);box-shadow:0 0 0 4px var(--p-100)}
+.login-card .btn{width:100%;min-height:54px;margin-top:12px;font-size:17px;border-radius:14px}
+.login-err{color:#b42318;font-weight:700;min-height:24px;margin-top:10px}
+.mode{display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:4px 12px;border-radius:999px;margin-top:16px;font-weight:700}
+.mode.on{background:#ecfdf3;color:#067647}.mode.off{background:#fff7e6;color:#7a4b00}
+.enc{display:flex;align-items:center;justify-content:center;gap:6px;color:var(--muted);font-size:13px;margin-top:14px}
+.enc .ico{width:16px;height:16px}
+
+/* اللوحة */
+#app{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+aside.side{background:var(--ink);color:#fff;padding:22px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:4px}
+.brand{display:flex;align-items:center;gap:10px;font-family:"Reem Kufi",serif;font-size:26px;padding:0 10px 18px}
+.brand .m{width:38px;height:38px;border-radius:50%;background:var(--p);display:grid;place-items:center}
+.brand small{display:block;font-family:"Tajawal";font-size:12px;color:#ffffff90}
+.tab{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:12px;color:#ffffffc0;text-decoration:none;font-weight:700;cursor:pointer;border:0;background:none;text-align:start;width:100%;transition:background .2s,color .2s}
+.tab:hover{background:#ffffff14;color:#fff}
+.tab[aria-current="page"]{background:var(--p);color:var(--on-p)}
+.tab .count{margin-inline-start:auto;background:#fff;color:var(--ink);border-radius:999px;font-size:12px;padding:0 8px;min-width:22px;text-align:center}
+.side .spacer{flex:1}
+main{padding:24px 28px 120px;min-width:0}
+.topbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.topbar h2{margin:0;font-size:24px;flex:1}
+.banner{border-radius:14px;padding:12px 16px;margin-bottom:16px;display:flex;gap:10px;align-items:center;font-weight:500}
+.banner.warn{background:#fff7e6;border:1px solid #f5d9a6;color:#7a4b00}
+.banner.info{background:var(--p-50);border:1px solid var(--line);color:var(--ink-2)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:20px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;animation:up .5s var(--ease) both}
+.stat:nth-child(2){animation-delay:.05s}.stat:nth-child(3){animation-delay:.1s}.stat:nth-child(4){animation-delay:.15s}.stat:nth-child(5){animation-delay:.2s}
+.stat small{color:var(--muted);font-weight:700}
+.stat b{display:block;font-size:30px;font-family:"Reem Kufi",serif;color:var(--p-ink);line-height:1.3}
+.panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px;margin-bottom:18px}
+.panel h3{margin:0 0 14px;font-size:18px;display:flex;align-items:center;gap:8px}
+.panel h3 .ico{color:var(--p-ink)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.bars .bar{display:grid;grid-template-columns:70px 1fr 40px;gap:10px;align-items:center;margin:10px 0}
+.bars .track{height:14px;background:var(--p-50);border-radius:999px;overflow:hidden}
+.bars .fill{height:100%;border-radius:999px;transform-origin:right;animation:grow .9s var(--ease) both}
+@keyframes grow{from{transform:scaleX(0)}}
+.empty{color:var(--muted);text-align:center;padding:30px}
+
+/* جدول الطلبات */
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.filters input,.filters select{border:1.5px solid var(--line);border-radius:12px;padding:8px 12px;min-height:42px;background:#fff}
+.filters input{flex:1;min-width:200px}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:#fff}
+table{width:100%;border-collapse:collapse;min-width:880px}
+th,td{padding:12px;text-align:start;border-bottom:1px solid var(--line);vertical-align:top;font-size:14.5px}
+th{background:var(--p-50);font-size:13px;color:var(--ink-2);position:sticky;top:0}
+tr:last-child td{border-bottom:0}
+td .sub{color:var(--muted);font-size:13px}
+.status{border:1.5px solid var(--line);border-radius:999px;padding:4px 10px;font-weight:700;font-size:13px;background:#fff;cursor:pointer}
+.st-جديد{background:#eff8ff;border-color:#b2ddff;color:#175cd3}
+.st-مؤكد{background:#fdf2fa;border-color:#fcceee;color:#c11574}
+.st-تم{background:#ecfdf3;border-color:#abefc6;color:#067647}
+.st-ملغي{background:#f2f4f7;border-color:#d0d5dd;color:#475467}
+.dots{display:flex;gap:4px;flex-wrap:wrap}
+.cdot{display:inline-flex;align-items:center;gap:4px;background:var(--p-50);border-radius:999px;padding:1px 8px 1px 4px;font-size:13px}
+.cdot i{width:12px;height:12px;border-radius:50%;display:inline-block}
+.acts{display:flex;gap:6px}
+.unsynced{color:#b54708;font-size:12px;font-weight:700}
+
+/* المحرر */
+.f{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.f label{font-weight:700;font-size:14px}
+.f .hint{color:var(--muted);font-size:12.5px}
+.f input,.f textarea,.f select{border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff;width:100%;min-height:44px}
+.f input:focus,.f textarea:focus,.f select:focus{outline:none;border-color:var(--p);box-shadow:0 0 0 3px var(--p-100)}
+.f textarea{min-height:80px;resize:vertical}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:0 14px}
+.list-item{border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px;background:var(--bg);animation:up .3s var(--ease)}
+.list-item .li-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.list-item .li-head b{flex:1}
+.color-row{display:grid;grid-template-columns:90px 1fr;gap:14px;align-items:start}
+.color-prev{width:90px;height:90px;border-radius:16px;overflow:hidden;background:#fff;border:1px solid var(--line);display:grid;place-items:center}
+.color-prev img{width:100%;height:100%;object-fit:cover}
+.toggle{display:flex;align-items:center;gap:10px;font-weight:700;cursor:pointer}
+.toggle input{width:20px;height:20px;accent-color:var(--p)}
+input[type=color]{padding:3px;height:44px;cursor:pointer}
+.savebar{position:fixed;bottom:18px;inset-inline-end:28px;inset-inline-start:278px;background:var(--ink);color:#fff;border-radius:18px;padding:12px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 20px 40px -18px #000a;transform:translateY(140%);transition:transform .4s var(--ease);z-index:20}
+.savebar.show{transform:none}
+.savebar span{flex:1;font-weight:700}
+.toast{position:fixed;top:20px;left:50%;transform:translate(-50%,-150%);background:var(--ink);color:#fff;padding:12px 20px;border-radius:14px;font-weight:700;z-index:99;transition:transform .4s var(--ease);box-shadow:0 10px 30px -10px #0008}
+.toast.show{transform:translate(-50%,0)}
+.toast.err{background:#b42318}
+code,pre{direction:ltr;text-align:left;background:var(--ink);color:#f8e3e9;border-radius:12px;font-size:13px}
+pre{padding:14px;overflow:auto;white-space:pre-wrap;word-break:break-all}
+.modal{position:fixed;inset:0;background:#0007;display:none;place-items:center;z-index:50;padding:20px}
+.modal.open{display:grid}
+.modal .box{background:#fff;border-radius:22px;padding:24px;max-width:560px;width:100%;max-height:90vh;overflow:auto;animation:up .3s var(--ease)}
+.kv{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;margin:10px 0}
+.kv dt{color:var(--muted);font-weight:700}.kv dd{margin:0}
+.mob-tabs{display:none}
+.themes{display:flex;gap:12px;flex-wrap:wrap}
+.theme-sw{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:96px;padding:14px 10px 10px;border-radius:18px;border:2px solid var(--line);background:#fff;cursor:pointer;transition:transform .25s var(--ease),border-color .25s,box-shadow .25s}
+.theme-sw:hover{transform:translateY(-3px);box-shadow:0 12px 24px -14px var(--c)}
+.theme-sw.on{border-color:var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 25%,transparent)}
+.theme-sw .disc{width:46px;height:46px;border-radius:50%;background:radial-gradient(circle at 30% 30%,color-mix(in srgb,var(--c) 55%,#fff),var(--c));box-shadow:inset 0 -4px 10px #0002;position:relative;overflow:hidden}
+.theme-sw small{color:var(--muted);font-size:12px}
+.theme-sw.on small{color:var(--ink);font-weight:800}
+.theme-sw.custom .disc{background:conic-gradient(#e58fa6,#e8a33d,#6E7B3E,#2F7A78,#22335E,#7B4FA0,#e58fa6)}
+.theme-sw.custom.on .disc{background:var(--c)}
+.theme-sw input[type=color]{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:0;padding:0}
+.site-prev{margin-top:16px;border:1px solid var(--line);border-radius:16px;overflow:hidden;height:300px;position:relative;background:var(--bg)}
+.site-prev iframe{border:0;width:200%;height:600px;transform:scale(.5);transform-origin:top right;pointer-events:none}
+::view-transition-new(root){animation:vt-in .6s var(--ease)}
+::view-transition-old(root){animation:none}
+@keyframes vt-in{from{clip-path:circle(0 at var(--vt-x) var(--vt-y))}to{clip-path:circle(150vmax at var(--vt-x) var(--vt-y))}}
+
+@media (max-width:900px){
+  #app{grid-template-columns:1fr}
+  aside.side{position:sticky;top:0;height:auto;z-index:30;flex-direction:row;overflow-x:auto;padding:10px;gap:6px}
+  aside.side .brand,aside.side .spacer{display:none}
+  .tab{width:auto;white-space:nowrap;padding:9px 12px}
+  main{padding:18px 14px 120px}
+  .two,.grid2,.grid3{grid-template-columns:1fr}
+  .savebar{inset-inline:12px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ============ تسجيل الدخول ============ -->
+<section id="login">
+  <form class="login-card" id="loginForm" autocomplete="off">
+    <div class="lock" id="lockIco"></div>
+    <h1>لوحة تحكم ورد</h1>
+    <p>للمسؤولة فقط</p>
+    <div class="pw"><label class="sr" for="pw" style="position:absolute;opacity:0">كلمة المرور</label><input id="pw" type="password" placeholder="كلمة المرور" autocomplete="current-password" required></div>
+    <button class="btn btn-p" id="loginBtn" type="submit">دخول</button>
+    <div class="login-err" id="loginErr" role="alert"></div>
+    <div id="modeBadge"></div>
+    <div class="enc" id="encNote"></div>
+  </form>
+</section>
+
+<!-- ============ اللوحة ============ -->
+<div id="app" hidden>
+  <aside class="side">
+    <div class="brand"><span class="m" id="brandMark"></span><div>ورد<small>لوحة التحكم</small></div></div>
+    <button class="tab" data-tab="home"></button>
+    <button class="tab" data-tab="orders"></button>
+    <button class="tab" data-tab="content"></button>
+    <button class="tab" data-tab="colors"></button>
+    <button class="tab" data-tab="delivery"></button>
+    <button class="tab" data-tab="faq"></button>
+    <button class="tab" data-tab="security"></button>
+    <div class="spacer"></div>
+    <a class="tab" href="index.html" target="_blank" rel="noopener" id="viewSite"></a>
+    <button class="tab" id="logout"></button>
+  </aside>
+  <main id="main"></main>
+</div>
+
+<div class="savebar" id="savebar" role="status"><span>عندك تعديلات ما انحفظت</span><button class="btn btn-sm" id="discardBtn" style="color:var(--ink)">تراجع</button><button class="btn btn-p btn-sm" id="saveBtn">حفظ ونشر</button></div>
+<div class="toast" id="toast" role="status"></div>
+<div class="modal" id="modal"><div class="box" id="modalBox"></div></div>
+
+<script src="config.js"></script>
+<script src="js/common.js"></script>
+<script>
+(function () {
+  "use strict";
+  const W = window.Ward, C = window.WARD_CONFIG, esc = W.esc, I = W.icon;
+  const $ = (id) => document.getElementById(id);
+  const SESSION = "ward_admin_session", LOCAL_CRED = "ward_local_admin";
+  const STATUSES = ["جديد", "مؤكد", "تم الشحن", "تم التسليم", "ملغي"];
+  const ICONS = ["bag", "wind", "palette", "gift", "briefcase", "plane", "heart", "moon", "truck", "wallet", "star", "shield", "sparkle"];
+
+  let key = null;            // مفتاح التوقيع (بالذاكرة + sessionStorage فقط)
+  let S = null, saved = null; // الإعدادات الحالية والمحفوظة
+  let orders = [], tab = "home", isDefaultPw = false;
+
+  /* ---------- أدوات واجهة ---------- */
+  function toast(msg, err) { const t = $("toast"); t.textContent = msg; t.classList.toggle("err", !!err); t.classList.add("show"); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove("show"), 2800); }
+  function modal(html) { $("modalBox").innerHTML = html; $("modal").classList.add("open"); }
+  function closeModal() { $("modal").classList.remove("open"); }
+  $("modal").addEventListener("click", (e) => { if (e.target.id === "modal" || e.target.closest("[data-close]")) closeModal(); });
+  function download(name, text, type) {
+    const blob = new Blob([text], { type }); const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  }
+  async function copy(text) { try { await navigator.clipboard.writeText(text); toast("انسخ ✔"); } catch (e) { toast("ما قدرت أنسخ، انسخيه يدويًا", true); } }
+
+  /* ---------- الدخول ---------- */
+  $("lockIco").innerHTML = I("lock");
+  $("modeBadge").innerHTML = W.hasApi() ? `<span class="mode on">● متصل بـ Google Sheets</span>` : `<span class="mode off">● وضع تجريبي (بدون قاعدة بيانات)</span>`;
+  $("encNote").innerHTML = I("shield") + "محمية بـ PBKDF2-SHA256 وتوقيع HMAC";
+  let fails = Number(sessionStorage.getItem("ward_fails") || 0), lockUntil = Number(sessionStorage.getItem("ward_lock") || 0);
+
+  $("loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const err = $("loginErr"), btn = $("loginBtn"), pw = $("pw").value;
+    if (Date.now() < lockUntil) { err.textContent = `محاولات كثيرة. استني ${Math.ceil((lockUntil - Date.now()) / 1000)} ثانية.`; return; }
+    if (!pw) return;
+    btn.disabled = true; btn.textContent = "جاري التحقق…"; err.textContent = "";
+    try {
+      let k = null;
+      if (W.hasApi()) {
+        const a = await W.api.get("auth");
+        const d = await W.crypto.derive(pw, a.salt, a.iterations);
+        const r = await W.api.signed("ping", {}, d.key);
+        if (r && r.ok) { k = d.key; isDefaultPw = !!r.isDefault; }
+        else if (r && r.error === "locked") throw new Error("locked");
+      } else {
+        const lc = W.store.get(LOCAL_CRED, null) || C.LOCAL_ADMIN;
+        const d = await W.crypto.derive(pw, lc.salt, lc.iterations);
+        if (d.verifier === lc.verifier) { k = d.key; isDefaultPw = lc.verifier === C.LOCAL_ADMIN.verifier && !W.store.get(LOCAL_CRED, null); }
+      }
+      if (!k) throw new Error("bad");
+      fails = 0; sessionStorage.removeItem("ward_fails");
+      $("lockIco").classList.add("ok");
+      key = k; sessionStorage.setItem(SESSION, JSON.stringify({ k, d: isDefaultPw, t: Date.now() }));
+      $("pw").value = "";
+      setTimeout(enter, 350);
+    } catch (ex) {
+      fails++; sessionStorage.setItem("ward_fails", fails);
+      if (fails >= 5) { lockUntil = Date.now() + 60000; sessionStorage.setItem("ward_lock", lockUntil); fails = 0; sessionStorage.setItem("ward_fails", 0); }
+      err.textContent = ex.message === "locked" ? "اللوحة مقفلة مؤقتًا بسبب محاولات كثيرة. جربي بعد 10 دقايق."
+        : ex.message === "timeout" || ex.name === "TypeError" ? "ما قدرت أتصل بقاعدة البيانات. تأكدي من الإنترنت ومن رابط API_URL."
+        : "كلمة المرور غير صحيحة";
+      const l = $("lockIco"); l.classList.remove("shake"); void l.offsetWidth; l.classList.add("shake");
+    }
+    btn.disabled = false; btn.textContent = "دخول";
+  });
+
+  function logout() { key = null; sessionStorage.removeItem(SESSION); location.hash = ""; location.reload(); }
+  // خروج تلقائي بعد 30 دقيقة بدون نشاط
+  let idle; const resetIdle = () => { clearTimeout(idle); idle = setTimeout(() => { if (key) { toast("انتهت الجلسة"); setTimeout(logout, 900); } }, 30 * 60 * 1000); };
+  ["click", "keydown", "mousemove", "touchstart"].forEach((ev) => addEventListener(ev, resetIdle, { passive: true }));
+
+  async function enter() {
+    $("login").hidden = true; $("app").hidden = false; resetIdle();
+    S = W.loadSettings((remote) => { if (!dirty()) { S = remote; saved = W.clone(remote); render(); } });
+    saved = W.clone(S);
+    W.applyTheme(W.siteThemeHex(S));
+    $("brandMark").innerHTML = I("heart");
+    const labels = { home: ["sparkle", "الرئيسية"], orders: ["bag", "الطلبات"], content: ["palette", "نصوص الموقع"], colors: ["star", "الألوان والمنتج"], delivery: ["truck", "التوصيل والدفع"], faq: ["heart", "الأسئلة والآراء"], security: ["shield", "الأمان والربط"] };
+    document.querySelectorAll("[data-tab]").forEach((b) => { const [ic, t] = labels[b.dataset.tab]; b.innerHTML = I(ic) + `<span>${t}</span>` + (b.dataset.tab === "orders" ? `<span class="count" id="newCount">0</span>` : ""); });
+    $("viewSite").innerHTML = I("sparkle") + "<span>عرض الموقع</span>";
+    $("logout").innerHTML = I("x") + "<span>خروج</span>";
+    tab = (location.hash || "#home").slice(1); if (!labels[tab]) tab = "home";
+    render();
+    await loadOrders();
+    // أول ربط بالسيرفر: انشري الإعدادات الافتراضية عشان الأسعار والتوصيل تنحسب صح
+    if (W.hasApi()) { try { const r = await W.api.get("settings"); if (r && r.ok && !r.settings) await persist(true); } catch (e) {} }
+  }
+
+  /* ---------- البيانات ---------- */
+  const curTheme = () => W.siteThemeHex(S).toLowerCase();
+
+  /* ---------- لون ثيم الموقع العام بكبسة زر (منفصل عن ألوان الطقم) ---------- */
+  function themeStrip(big) {
+    const cur = curTheme(), presets = S.themePresets || [];
+    const isPreset = presets.some((t) => t.hex.toLowerCase() === cur);
+    return `<div class="panel theme-panel"><h3>${I("palette")}لون ثيم الموقع — بكبسة زر<span class="hint" style="margin-inline-start:auto;font-weight:500">بيتغير عند كل الزوار فورًا • منفصل عن ألوان الطقم</span></h3>
+      <div class="themes">${presets.map((t) => { const on = t.hex.toLowerCase() === cur; return `<button class="theme-sw ${on ? "on" : ""}" data-site-theme="${esc(t.hex)}" style="--c:${esc(t.hex)}" aria-pressed="${on}"><span class="disc"></span><b>${esc(t.name)}</b>${on ? `<small>الحالي ✓</small>` : ""}</button>`; }).join("")}
+        <label class="theme-sw custom ${!isPreset ? "on" : ""}" style="--c:${esc(!isPreset ? cur : "#C08A5B")}" title="لون مخصص"><span class="disc"><input type="color" id="customTheme" value="${esc(!isPreset ? cur : "#C08A5B")}" aria-label="اختاري لون مخصص للموقع"></span><b>لون مخصص</b>${!isPreset ? `<small>الحالي ✓</small>` : `<small>اختاري أي لون</small>`}</label></div>
+      ${big ? `<div class="site-prev"><iframe id="sitePrev" src="index.html" title="معاينة الموقع" loading="lazy" tabindex="-1"></iframe></div>` : ""}</div>`;
+  }
+  async function setSiteTheme(val, ev) {
+    val = String(val).toLowerCase();
+    if (val === curTheme()) return;
+    const prev = saved.siteTheme;
+    W.applyTheme(val, ev);
+    S.siteTheme = val; saved.siteTheme = val;
+    try {
+      if (W.hasApi()) {
+        const r = await W.api.signed("saveSettings", { settings: saved }, key);
+        if (!r.ok) throw new Error(r.error);
+      }
+      W.saveLocalSettings({ data: saved, from: W.hasApi() ? "server" : "local", at: Date.now() });
+      toast("تغيّر لون الموقع ونُشر ✔");
+    } catch (e) {
+      S.siteTheme = prev; saved.siteTheme = prev; W.applyTheme(W.siteThemeHex(S));
+      toast("ما تغيّر اللون: " + e.message, true);
+    }
+    markDirty(); render();
+    const f = $("sitePrev"); if (f) try { f.contentWindow.location.reload(); } catch (e) { f.src = f.src; }
+  }
+  function dirty() { return S && saved && JSON.stringify(S) !== JSON.stringify(saved); }
+  function markDirty() { $("savebar").classList.toggle("show", dirty()); }
+
+  async function loadOrders() {
+    try {
+      if (W.hasApi()) {
+        const r = await W.api.signed("getOrders", {}, key);
+        if (!r.ok) throw new Error(r.error);
+        orders = r.orders || [];
+        const un = W.localOrders.all().filter((o) => o.unsynced); // طلبات ما وصلت السيرفر من هذا الجهاز
+        orders = un.concat(orders);
+      } else orders = W.localOrders.all();
+    } catch (e) { toast("ما قدرت أجيب الطلبات: " + e.message, true); }
+    $("newCount").textContent = orders.filter((o) => o.status === "جديد").length;
+    if (tab === "home" || tab === "orders") render();
+  }
+
+  async function persist(silent) {
+    const btn = $("saveBtn"); btn.disabled = true; btn.textContent = "جاري الحفظ…";
+    try {
+      if (W.hasApi()) {
+        const r = await W.api.signed("saveSettings", { settings: S }, key);
+        if (!r.ok) throw new Error(r.error === "too large" ? "المحتوى كبير كثير" : r.error);
+      }
+      W.saveLocalSettings({ data: S, from: W.hasApi() ? "server" : "local", at: Date.now() });
+      saved = W.clone(S); markDirty();
+      if (!silent) toast(W.hasApi() ? "انحفظ وانشر على الموقع ✔" : "انحفظ على هذا المتصفح ✔");
+    } catch (e) { toast("ما انحفظ: " + e.message, true); }
+    btn.disabled = false; btn.textContent = "حفظ ونشر";
+  }
+  $("saveBtn").addEventListener("click", () => persist());
+  $("discardBtn").addEventListener("click", () => { S = W.clone(saved); markDirty(); render(); });
+  addEventListener("beforeunload", (e) => { if (dirty()) { e.preventDefault(); e.returnValue = ""; } });
+
+  /* ---------- التنقل ---------- */
+  document.addEventListener("click", (e) => {
+    const t = e.target.closest("[data-tab]"); if (t) { tab = t.dataset.tab; location.hash = tab; render(); window.scrollTo(0, 0); }
+    if (e.target.closest("#logout")) logout();
+  });
+
+  /* ---------- الرسم ---------- */
+  function render() {
+    document.querySelectorAll("[data-tab]").forEach((b) => b.setAttribute("aria-current", b.dataset.tab === tab ? "page" : "false"));
+    const banners = [];
+    if (isDefaultPw) banners.push(`<div class="banner warn">${I("lock")}<span>لسا كلمة المرور الافتراضية. غيّريها من <a href="#security" data-tab="security">الأمان والربط</a> قبل ما تنشري الموقع.</span></div>`);
+    if (!W.hasApi()) banners.push(`<div class="banner info">${I("sparkle")}<span>وضع تجريبي: التعديلات والطلبات محفوظة على هذا المتصفح فقط. اربطي Google Sheets (شوفي README) لتوصلك طلبات كل الزوار.</span></div>`);
+    const views = { home: viewHome, orders: viewOrders, content: viewContent, colors: viewColors, delivery: viewDelivery, faq: viewFaq, security: viewSecurity };
+    $("main").innerHTML = banners.join("") + views[tab]();
+    bindEditors();
+  }
+
+  /* الرئيسية */
+  function viewHome() {
+    const cur = S.product.currency || "₪";
+    const day = 864e5, now = Date.now(), t0 = new Date(); t0.setHours(0, 0, 0, 0);
+    const live = orders.filter((o) => o.status !== "ملغي");
+    const today = orders.filter((o) => new Date(o.createdAt) >= t0).length;
+    const week = orders.filter((o) => now - new Date(o.createdAt) < 7 * day).length;
+    const fresh = orders.filter((o) => o.status === "جديد").length;
+    const sales = live.filter((o) => o.status !== "جديد").reduce((a, o) => a + (Number(o.total) || 0), 0);
+    const byColor = {}; live.forEach((o) => (o.items || []).forEach((i) => { byColor[i.colorId || i.color] = (byColor[i.colorId || i.color] || 0) + Number(i.qty || 0); }));
+    const max = Math.max(1, ...Object.values(byColor));
+    const bars = S.colors.map((c) => { const n = byColor[c.id] || byColor[c.name] || 0; return `<div class="bar"><span>${esc(c.name)}</span><div class="track"><div class="fill" style="width:${(n / max) * 100}%;background:${esc(c.hex)}"></div></div><b>${n}</b></div>`; }).join("");
+    return `<div class="topbar"><h2>أهلين 🌸</h2><button class="btn" id="refresh">${I("sparkle")}تحديث</button></div>
+      ${themeStrip(true)}
+      <div class="stats">
+        <div class="stat"><small>طلبات اليوم</small><b>${today}</b></div>
+        <div class="stat"><small>آخر 7 أيام</small><b>${week}</b></div>
+        <div class="stat"><small>بحاجة تأكيد</small><b>${fresh}</b></div>
+        <div class="stat"><small>كل الطلبات</small><b>${orders.length}</b></div>
+        <div class="stat"><small>مبيعات مؤكدة</small><b>${esc(W.money(sales, cur))}</b></div>
+      </div>
+      <div class="two">
+        <div class="panel"><h3>${I("palette")}الأطقم المطلوبة حسب اللون</h3><div class="bars">${bars}</div></div>
+        <div class="panel"><h3>${I("bag")}آخر الطلبات</h3>${orders.length ? orders.slice(0, 5).map((o) => `<div style="display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)"><span><b>${esc(o.name)}</b> <span class="sub" style="color:var(--muted)">${esc(o.city || "")}</span></span><span class="status ${stCls(o.status)}">${esc(o.status)}</span></div>`).join("") + `<button class="btn" data-tab="orders" style="margin-top:12px;width:100%">كل الطلبات</button>` : `<div class="empty">لسا ما في طلبات</div>`}</div>
+      </div>`;
+  }
+  const stCls = (s) => "st-" + String(s || "").split(" ")[0];
+
+  /* الطلبات */
+  let q = "", fs = "";
+  function viewOrders() {
+    const cur = S.product.currency || "₪";
+    const list = orders.filter((o) => (!fs || o.status === fs) && (!q || [o.id, o.name, o.phone, o.city, o.region].join(" ").toLowerCase().includes(q.toLowerCase())));
+    const colorOf = (i) => (S.colors.find((c) => c.id === i.colorId || c.name === i.color) || {}).hex || "#ccc";
+    return `<div class="topbar"><h2>الطلبات (${orders.length})</h2><button class="btn" id="refresh">${I("sparkle")}تحديث</button><button class="btn" id="csv">${I("check")}تصدير Excel (CSV)</button></div>
+      <div class="filters"><input id="q" type="search" placeholder="ابحثي بالاسم، الرقم، المدينة…" value="${esc(q)}"><select id="fs"><option value="">كل الحالات</option>${STATUSES.map((s) => `<option ${s === fs ? "selected" : ""}>${s}</option>`).join("")}</select></div>
+      ${list.length ? `<div class="tbl-wrap"><table><thead><tr><th>الطلب</th><th>الزبونة</th><th>العنوان</th><th>الألوان</th><th>المجموع</th><th>الحالة</th><th></th></tr></thead><tbody>
+      ${list.map((o) => `<tr>
+        <td><b dir="ltr" style="white-space:nowrap">${esc(o.id)}</b><div class="sub">${esc(new Date(o.createdAt).toLocaleString("ar-EG", { dateStyle: "medium", timeStyle: "short" }))}</div>${o.unsynced ? '<div class="unsynced">لم يصل للشيت</div>' : ""}</td>
+        <td><b>${esc(o.name)}</b><div class="sub" dir="ltr" style="text-align:right">${esc(o.phone)}</div></td>
+        <td>${esc(o.region)} — ${esc(o.city)}<div class="sub">${esc(o.address)}</div></td>
+        <td><div class="dots">${(o.items || []).map((i) => `<span class="cdot"><i style="background:${esc(colorOf(i))}"></i>${esc(i.color)} × ${esc(i.qty)}</span>`).join("")}</div></td>
+        <td><b>${esc(W.money(o.total, cur))}</b><div class="sub">${o.delivery === "" ? "+ توصيل يُحدد" : "شامل التوصيل"} • ${esc(o.payment)}</div></td>
+        <td><select class="status ${stCls(o.status)}" data-status="${esc(o.id)}">${STATUSES.map((s) => `<option ${s === o.status ? "selected" : ""}>${s}</option>`).join("")}</select></td>
+        <td><div class="acts"><a class="btn btn-call btn-sm" href="${esc(W.telLink(o.phone))}" title="اتصلي فيها">${I("phone")}</a><button class="btn btn-sm" data-view="${esc(o.id)}" title="تفاصيل">${I("sparkle")}</button><button class="btn btn-sm btn-d" data-del="${esc(o.id)}" title="حذف">${I("x")}</button></div></td>
+      </tr>`).join("")}</tbody></table></div>` : `<div class="panel empty">${orders.length ? "ما في نتائج للبحث" : "لسا ما في طلبات. أول ما توصل طلبات من الموقع بتظهر هون."}</div>`}`;
+  }
+  function confirmMsg(o) {
+    return `طلب ${o.id}\nالاسم: ${o.name}\nالجوال: ${o.phone}\n` + (o.items || []).map((i) => `• ${i.color} × ${i.qty}`).join("\n") +
+      `\nالمجموع: ${o.total} ${S.product.currency || "₪"}${o.delivery === "" ? " + التوصيل" : ""}\nالعنوان: ${o.region} - ${o.city} - ${o.address}\nالدفع: ${o.payment}` + (o.notes ? `\nملاحظات: ${o.notes}` : "");
+  }
+  async function setStatus(id, status) {
+    const o = orders.find((x) => x.id === id); if (!o) return;
+    const old = o.status; o.status = status;
+    try {
+      if (W.hasApi() && !o.unsynced) { const r = await W.api.signed("updateOrder", { id, status }, key); if (!r.ok) throw new Error(r.error); }
+      else { const all = W.localOrders.all(); const lo = all.find((x) => x.id === id); if (lo) { lo.status = status; W.localOrders.save(all); } }
+      toast("تحدّثت الحالة ✔"); $("newCount").textContent = orders.filter((x) => x.status === "جديد").length;
+    } catch (e) { o.status = old; toast("ما تحدّثت: " + e.message, true); }
+    render();
+  }
+  async function delOrder(id) {
+    const o = orders.find((x) => x.id === id); if (!o) return;
+    try {
+      if (W.hasApi() && !o.unsynced) { const r = await W.api.signed("deleteOrder", { id }, key); if (!r.ok) throw new Error(r.error); }
+      W.localOrders.save(W.localOrders.all().filter((x) => x.id !== id));
+      orders = orders.filter((x) => x.id !== id); toast("انحذف الطلب"); closeModal(); render();
+    } catch (e) { toast("ما انحذف: " + e.message, true); }
+  }
+  function exportCSV() {
+    const cols = ["رقم الطلب", "التاريخ", "الحالة", "الاسم", "الجوال", "المنطقة", "المدينة", "العنوان", "الألوان", "الكمية", "سعر المنتجات", "التوصيل", "المجموع", "الدفع", "ملاحظات"];
+    const cell = (v) => { let s = String(v == null ? "" : v); if (/^[=+\-@]/.test(s)) s = "'" + s; return '"' + s.replace(/"/g, '""') + '"'; };
+    const rows = orders.map((o) => [o.id, new Date(o.createdAt).toLocaleString("en-GB"), o.status, o.name, o.phone, o.region, o.city, o.address, (o.items || []).map((i) => i.color + " × " + i.qty).join("، "), o.qty, o.subtotal, o.delivery, o.total, o.payment, o.notes].map(cell).join(","));
+    download("ward-orders-" + new Date().toISOString().slice(0, 10) + ".csv", "﻿" + [cols.map(cell).join(",")].concat(rows).join("\r\n"), "text/csv;charset=utf-8");
+  }
+  function viewOrder(id) {
+    const o = orders.find((x) => x.id === id); if (!o) return;
+    modal(`<h3 style="margin-top:0">طلب <span dir="ltr">${esc(o.id)}</span></h3><dl class="kv">
+      <dt>التاريخ</dt><dd>${esc(new Date(o.createdAt).toLocaleString("ar-EG"))}</dd><dt>الاسم</dt><dd>${esc(o.name)}</dd><dt>الجوال</dt><dd dir="ltr" style="text-align:right">${esc(o.phone)}</dd>
+      <dt>العنوان</dt><dd>${esc(o.region)} — ${esc(o.city)} — ${esc(o.address)}</dd><dt>الألوان</dt><dd>${(o.items || []).map((i) => esc(i.color) + " × " + esc(i.qty)).join("، ")}</dd>
+      <dt>المنتجات</dt><dd>${esc(W.money(o.subtotal))}</dd><dt>التوصيل</dt><dd>${o.delivery === "" ? "يُحدد" : esc(W.money(o.delivery))}</dd><dt>المجموع</dt><dd><b>${esc(W.money(o.total))}</b></dd>
+      <dt>الدفع</dt><dd>${esc(o.payment)}</dd><dt>ملاحظات</dt><dd>${esc(o.notes || "—")}</dd></dl>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn btn-call" href="${esc(W.telLink(o.phone))}">${I("phone")}اتصال</a><button class="btn" data-copy-phone="${esc(o.phone)}">نسخ الرقم</button><button class="btn" data-copy-order="${esc(o.id)}">نسخ تفاصيل الطلب</button><button class="btn btn-d" data-del-confirm="${esc(o.id)}">حذف الطلب</button><button class="btn" data-close style="margin-inline-start:auto">إغلاق</button></div>`);
+  }
+
+  /* ---------- محرر المحتوى (حقول مربوطة بمسار داخل S) ---------- */
+  const get = (path) => path.split(".").reduce((o, k) => (o == null ? o : o[k]), S);
+  function set(path, v) { const ks = path.split("."); const last = ks.pop(); const o = ks.reduce((o, k) => o[k], S); o[last] = v; markDirty(); }
+  function fld(path, label, opt) {
+    opt = opt || {}; const v = get(path); const id = "f_" + path.replace(/\./g, "_");
+    const type = opt.type || "text";
+    let input;
+    if (type === "textarea") input = `<textarea id="${id}" data-path="${path}">${esc(v)}</textarea>`;
+    else if (type === "select") input = `<select id="${id}" data-path="${path}">${opt.options.map((o) => `<option value="${esc(o[0])}" ${String(o[0]) === String(v) ? "selected" : ""}>${esc(o[1])}</option>`).join("")}</select>`;
+    else if (type === "lines") input = `<textarea id="${id}" data-path="${path}" data-type="lines">${esc((v || []).join("\n"))}</textarea>`;
+    else if (type === "checkbox") return `<label class="toggle f"><input type="checkbox" data-path="${path}" data-type="checkbox" ${v ? "checked" : ""}>${esc(label)}</label>`;
+    else input = `<input id="${id}" type="${type === "nullnum" ? "number" : type}" data-path="${path}" ${type === "number" || type === "nullnum" ? `data-type="${type}" inputmode="numeric"` : ""} value="${esc(v == null ? "" : v)}" ${opt.dir ? `dir="${opt.dir}"` : ""} placeholder="${esc(opt.ph || "")}">`;
+    return `<div class="f"><label for="${id}">${esc(label)}</label>${input}${opt.hint ? `<span class="hint">${esc(opt.hint)}</span>` : ""}</div>`;
+  }
+  function listEditor(path, title, fields, blank, itemTitle) {
+    const arr = get(path) || [];
+    return `<div class="panel"><h3>${esc(title)}</h3>${arr.map((it, i) => `<div class="list-item"><div class="li-head"><b>${esc(itemTitle ? itemTitle(it, i) : "#" + (i + 1))}</b>
+        <button class="btn btn-sm" data-move="${path}|${i}|-1" title="لفوق" ${i === 0 ? "disabled" : ""}>↑</button><button class="btn btn-sm" data-move="${path}|${i}|1" title="لتحت" ${i === arr.length - 1 ? "disabled" : ""}>↓</button><button class="btn btn-sm btn-d" data-remove="${path}|${i}">حذف</button></div>
+        <div class="${fields.length > 2 ? "grid2" : ""}">${fields.map((f) => fld(`${path}.${i}.${f[0]}`, f[1], f[2])).join("")}</div></div>`).join("")}
+      <button class="btn" data-add="${path}" data-blank='${esc(JSON.stringify(blank))}'>${I("plus")}إضافة</button></div>`;
+  }
+  const iconOpts = { type: "select", options: ICONS.map((i) => [i, i]) };
+
+  function viewContent() {
+    return `<div class="topbar"><h2>نصوص الموقع</h2></div>
+      <div class="panel"><h3>${I("sparkle")}الهوية والإعلان</h3><div class="grid2">${fld("brand.name", "اسم الموقع")}${fld("brand.tagline", "الشعار")}</div>${fld("announcement", "شريط الإعلان (أعلى الصفحة)")}</div>
+      <div class="panel"><h3>${I("heart")}الواجهة الرئيسية</h3>${fld("hero.eyebrow", "سطر صغير فوق العنوان")}${fld("hero.title", "العنوان الرئيسي", { hint: "استخدمي … (ثلاث نقاط) لتلوين الجزء الثاني من العنوان" })}${fld("hero.subtitle", "النص تحت العنوان", { type: "textarea" })}<div class="grid2">${fld("hero.cta", "الزر الرئيسي")}${fld("hero.cta2", "الزر الثاني (بيروح للأسعار)")}</div>${fld("hero.chips", "مميزات قصيرة (كل سطر ميزة)", { type: "lines" })}${fld("hero.image", "صورة الواجهة الرئيسية", { dir: "ltr", ph: "images/pink.jpg", hint: "مسار صورة من مجلد images، أو فاضي لعرض رسمة الشنطة" })}</div>
+      ${listEditor("benefits", "ليش ورد؟ (الفوائد)", [["icon", "الأيقونة", iconOpts], ["title", "العنوان"], ["text", "النص", { type: "textarea" }]], { icon: "sparkle", title: "", text: "" }, (b) => b.title)}
+      ${listEditor("occasions", "المناسبات", [["icon", "الأيقونة", iconOpts], ["title", "العنوان"], ["text", "النص"]], { icon: "heart", title: "", text: "" }, (b) => b.title)}
+      ${listEditor("steps", "خطوات الطلب", [["title", "العنوان"], ["text", "النص"]], { title: "", text: "" }, (b, i) => "خطوة " + (i + 1))}
+      <div class="panel"><h3>${I("check")}رسالة بعد إتمام الطلب</h3>${fld("orderSuccess.title", "العنوان")}${fld("orderSuccess.text", "الرسالة", { type: "textarea" })}</div>
+      <div class="panel"><h3>${I("gift")}الختام والتواصل</h3><div class="grid2">${fld("finalCta.title", "عنوان الختام")}${fld("finalCta.text", "نص الختام")}</div>
+        <div class="grid2">${fld("contact.email", "الإيميل", { dir: "ltr" })}${fld("contact.instagram", "رابط إنستغرام", { dir: "ltr", ph: "https://instagram.com/..." })}${fld("contact.facebook", "رابط فيسبوك", { dir: "ltr" })}</div></div>
+      <div class="panel"><h3>${I("star")}محركات البحث (SEO)</h3>${fld("seo.title", "عنوان الصفحة (حتى 60 حرف)")}${fld("seo.description", "الوصف (حتى 155 حرف)", { type: "textarea" })}</div>`;
+  }
+  function viewColors() {
+    const arr = S.colors;
+    return `<div class="topbar"><h2>الألوان والمنتج</h2></div>
+      <div class="panel"><h3>${I("bag")}المنتج والأسعار</h3><div class="grid2">${fld("product.name", "اسم المنتج")}${fld("product.fabric", "القماش")}</div>${fld("product.description", "الوصف", { type: "textarea" })}
+        <div class="grid3">${fld("product.unitPrice", "سعر الطقم", { type: "number" })}${fld("product.pairPrice", "سعر الطقمين", { type: "number" })}${fld("product.currency", "العملة")}</div>${fld("product.features", "مميزات المنتج (كل سطر ميزة)", { type: "lines" })}</div>
+      ${themeStrip(false)}
+      ${listEditor("themePresets", "قائمة ألوان ثيم الموقع (اللي بتظهر كأزرار فوق)", [["name", "الاسم"], ["hex", "اللون", { type: "color" }]], { name: "", hex: "#C08A5B" }, (t) => t.name)}
+      <div class="panel"><h3>${I("star")}ألوان الطقم (المنتج)<span class="hint" style="margin-inline-start:auto;font-weight:500">ما بتأثر على لون الموقع</span></h3>
+      ${arr.map((c, i) => `<div class="list-item"><div class="li-head"><b>${esc(c.name || "لون جديد")}</b><button class="btn btn-sm" data-move="colors|${i}|-1" ${i === 0 ? "disabled" : ""}>↑</button><button class="btn btn-sm" data-move="colors|${i}|1" ${i === arr.length - 1 ? "disabled" : ""}>↓</button><button class="btn btn-sm btn-d" data-remove="colors|${i}">حذف</button></div>
+        <div class="color-row"><div class="color-prev" id="cprev${i}">${c.image ? `<img src="${esc(c.image)}" alt="">` : W.bagSVG(c.hex)}</div>
+        <div><div class="grid3">${fld(`colors.${i}.name`, "اسم اللون")}${fld(`colors.${i}.hex`, "اللون", { type: "color" })}${fld(`colors.${i}.id`, "معرّف (إنجليزي)", { dir: "ltr" })}</div>
+        ${fld(`colors.${i}.image`, "صورة المنتج بهذا اللون", { dir: "ltr", ph: "images/" + (c.id || "color") + ".jpg", hint: "حطي الصورة بمجلد images وارفعيها مع الموقع، أو الصقي رابط صورة. فاضي = رسمة تلقائية." })}
+        ${fld(`colors.${i}.available`, "متوفر للبيع", { type: "checkbox" })}</div></div></div>`).join("")}
+      <button class="btn" data-add="colors" data-blank='${esc(JSON.stringify({ id: "", name: "", hex: "#C08A5B", image: "", available: true }))}'>${I("plus")}إضافة لون</button></div>`;
+  }
+  function viewDelivery() {
+    return `<div class="topbar"><h2>التوصيل والدفع</h2></div>
+      ${listEditor("delivery.regions", "مناطق التوصيل", [["name", "المنطقة"], ["fee", "السعر (فاضي = يُحدد عند التأكيد)", { type: "nullnum" }]], { name: "", fee: null }, (r) => r.name)}
+      <div class="panel"><h3>${I("truck")}معلومات التوصيل</h3>${fld("delivery.time", "مدة التوصيل")}${fld("delivery.note", "ملاحظة التوصيل", { type: "textarea" })}${fld("payments", "طرق الدفع (كل سطر طريقة)", { type: "lines" })}</div>`;
+  }
+  function viewFaq() {
+    return `<div class="topbar"><h2>الأسئلة والآراء</h2></div>
+      ${listEditor("faq", "الأسئلة الشائعة", [["q", "السؤال"], ["a", "الجواب", { type: "textarea" }]], { q: "", a: "" }, (f) => f.q)}
+      <div class="banner info">${I("star")}<span>أضيفي آراء زبونات حقيقية فقط (بموافقتهم). قسم الآراء ما بيظهر بالموقع إلا لما تضيفي رأي.</span></div>
+      ${listEditor("reviews", "آراء الزبونات", [["name", "الاسم"], ["city", "المدينة"], ["stars", "النجوم (1-5)", { type: "number" }], ["text", "الرأي", { type: "textarea" }]], { name: "", city: "", stars: 5, text: "" }, (r) => r.name)}`;
+  }
+  function viewSecurity() {
+    return `<div class="topbar"><h2>الأمان والربط</h2></div>
+      <div class="panel"><h3>${I("lock")}تغيير كلمة المرور</h3>
+        <div class="grid2"><div class="f"><label for="np1">كلمة المرور الجديدة</label><input id="np1" type="password" autocomplete="new-password" dir="ltr"><span class="hint">10 أحرف على الأقل، خلطي حروف وأرقام ورموز</span></div><div class="f"><label for="np2">أعيدي كتابتها</label><input id="np2" type="password" autocomplete="new-password" dir="ltr"></div></div>
+        <button class="btn btn-p" id="changePw">${I("shield")}تغيير كلمة المرور</button><div id="pwOut"></div></div>
+      <div class="panel"><h3>${I("sparkle")}الربط</h3>
+        <dl class="kv"><dt>قاعدة البيانات</dt><dd>${W.hasApi() ? "Google Sheets ✔" : "غير موصولة (وضع تجريبي)"}</dd><dt>Meta Pixel</dt><dd>${C.META_PIXEL_ID ? "موصول ✔" : "غير موصول (config.js)"}</dd></dl>
+        ${W.hasApi() ? `<button class="btn" id="testApi">اختبار الاتصال</button>` : `<p class="hint" style="color:var(--muted)">لتربطي Google Sheets اتبعي ملف README.md، والصقي الرابط في config.js مكان API_URL.</p>`}</div>
+      <div class="panel"><h3>${I("bag")}نسخة احتياطية</h3><div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="exportJson">تنزيل نسخة من المحتوى (JSON)</button>
+        <label class="btn">استيراد نسخة<input type="file" id="importJson" accept="application/json" hidden></label>
+        <button class="btn btn-d" id="resetDefaults">استعادة المحتوى الافتراضي</button></div></div>`;
+  }
+
+  /* ---------- ربط الأحداث ---------- */
+  function bindEditors() {
+    const m = $("main");
+    m.querySelectorAll("[data-path]").forEach((el) => {
+      const ev = el.tagName === "SELECT" || el.type === "checkbox" || el.type === "color" ? "change" : "input";
+      el.addEventListener(ev, () => {
+        const t = el.dataset.type; let v;
+        if (t === "checkbox") v = el.checked;
+        else if (t === "number") v = el.value === "" ? 0 : Number(el.value);
+        else if (t === "nullnum") v = el.value === "" ? null : Number(el.value);
+        else if (t === "lines") v = el.value.split("\n").map((s) => s.trim()).filter(Boolean);
+        else v = el.value;
+        set(el.dataset.path, v);
+        const mm = el.dataset.path.match(/^colors\.(\d+)\.(hex|image)$/);
+        if (/^themePresets\./.test(el.dataset.path) && el.type === "color") { render(); return; }
+        if (mm) { const c = S.colors[+mm[1]]; $("cprev" + mm[1]).innerHTML = c.image ? `<img src="${esc(c.image)}" alt="">` : W.bagSVG(c.hex); }
+      });
+    });
+    const ct = $("customTheme"); if (ct) ct.addEventListener("change", (e) => setSiteTheme(ct.value.toLowerCase(), e));
+    const on = (id, fn) => { const el = $(id); if (el) el.addEventListener("click", fn); };
+    on("refresh", () => loadOrders().then(() => toast("تحدّث ✔")));
+    on("csv", exportCSV);
+    const qi = $("q"); if (qi) qi.addEventListener("input", () => { q = qi.value; const pos = qi.selectionStart; render(); const n = $("q"); n.focus(); n.setSelectionRange(pos, pos); });
+    const fsel = $("fs"); if (fsel) fsel.addEventListener("change", () => { fs = fsel.value; render(); });
+    m.querySelectorAll("[data-status]").forEach((s) => s.addEventListener("change", () => setStatus(s.dataset.status, s.value)));
+    on("changePw", changePw);
+    on("testApi", async () => { try { const r = await W.api.signed("ping", {}, key); toast(r.ok ? "الاتصال شغال ✔" : "خطأ: " + r.error, !r.ok); } catch (e) { toast("ما في اتصال", true); } });
+    on("exportJson", () => download("ward-content.json", JSON.stringify(S, null, 2), "application/json"));
+    on("resetDefaults", () => modal(`<h3 style="margin-top:0">استعادة المحتوى الافتراضي؟</h3><p>كل النصوص والأسعار والألوان بترجع للأصل (الطلبات ما بتتأثر). بعدها اضغطي "حفظ ونشر".</p><div style="display:flex;gap:8px"><button class="btn btn-d" id="doReset">استعادة</button><button class="btn" data-close>إلغاء</button></div>`));
+    const imp = $("importJson");
+    if (imp) imp.addEventListener("change", async () => {
+      const f = imp.files[0]; if (!f) return;
+      try { const data = JSON.parse(await f.text()); if (!data || !data.product || !data.colors) throw new Error(); S = W.merge(W.defaults(), data); markDirty(); render(); toast("انستورد. اضغطي حفظ ونشر"); }
+      catch (e) { toast("الملف مش صالح", true); }
+    });
+  }
+  document.addEventListener("click", (e) => {
+    const t = e.target;
+    const add = t.closest("[data-add]");
+    if (add) { const arr = get(add.dataset.add); const blank = JSON.parse(add.dataset.blank); if (add.dataset.add === "colors") blank.id = "c" + W.crypto.randomHex(3); arr.push(blank); markDirty(); render(); return; }
+    const rm = t.closest("[data-remove]");
+    if (rm) { const [p, i] = rm.dataset.remove.split("|"); const arr = get(p); if (p === "colors" && arr.length <= 1) { toast("لازم يضل لون واحد على الأقل", true); return; } arr.splice(+i, 1); markDirty(); render(); return; }
+    const mv = t.closest("[data-move]");
+    if (mv) { const [p, i, d] = mv.dataset.move.split("|"); const arr = get(p); const a = +i, b = a + +d; if (b < 0 || b >= arr.length) return; [arr[a], arr[b]] = [arr[b], arr[a]]; markDirty(); render(); return; }
+    const st = t.closest("[data-site-theme]"); if (st) { setSiteTheme(st.dataset.siteTheme, e); return; }
+    const v = t.closest("[data-view]"); if (v) { viewOrder(v.dataset.view); return; }
+    const d = t.closest("[data-del]"); if (d) { modal(`<h3 style="margin-top:0">حذف الطلب ${esc(d.dataset.del)}؟</h3><p>ما بتقدري ترجعيه بعد الحذف.</p><div style="display:flex;gap:8px"><button class="btn btn-d" data-del-confirm="${esc(d.dataset.del)}">حذف</button><button class="btn" data-close>إلغاء</button></div>`); return; }
+    const dc = t.closest("[data-del-confirm]"); if (dc) { delOrder(dc.dataset.delConfirm); return; }
+    const cp = t.closest("[data-copy-phone]"); if (cp) { copy(cp.dataset.copyPhone); return; }
+    const co = t.closest("[data-copy-order]"); if (co) { const o = orders.find((x) => x.id === co.dataset.copyOrder); if (o) copy(confirmMsg(o)); return; }
+    if (t.closest("#doReset")) { S = W.defaults(); markDirty(); closeModal(); render(); toast("رجع المحتوى الافتراضي. اضغطي حفظ ونشر"); }
+  });
+
+  async function changePw() {
+    const a = $("np1").value, b = $("np2").value, out = $("pwOut");
+    if (a.length < 10) { toast("كلمة المرور لازم تكون 10 أحرف أو أكثر", true); return; }
+    if (a !== b) { toast("كلمتين المرور مش متطابقات", true); return; }
+    const btn = $("changePw"); btn.disabled = true;
+    try {
+      const cr = await W.crypto.newCredentials(a);
+      if (W.hasApi()) {
+        const r = await W.api.signed("changePassword", cr, key);
+        if (!r.ok) throw new Error(r.error);
+        key = cr.key; sessionStorage.setItem(SESSION, JSON.stringify({ k: key, t: Date.now() }));
+        out.innerHTML = `<p style="color:#067647;font-weight:700">تغيّرت كلمة المرور ✔ (محفوظة مشفرة على السيرفر)</p>`;
+      } else {
+        W.store.set(LOCAL_CRED, { salt: cr.salt, iterations: cr.iterations, verifier: cr.verifier });
+        key = cr.key;
+        out.innerHTML = `<p style="font-weight:700">تغيّرت على هذا المتصفح ✔. لتثبيتها بالموقع المرفوع، استبدلي قسم LOCAL_ADMIN في config.js بهذا:</p><pre>LOCAL_ADMIN: ${esc(JSON.stringify({ salt: cr.salt, iterations: cr.iterations, verifier: cr.verifier }, null, 2))},</pre>`;
+      }
+      isDefaultPw = false; $("np1").value = $("np2").value = ""; toast("تغيّرت كلمة المرور ✔");
+    } catch (e) { toast("ما تغيّرت: " + e.message, true); }
+    btn.disabled = false;
+  }
+
+  /* ---------- استكمال الجلسة ---------- */
+  try {
+    const s = JSON.parse(sessionStorage.getItem(SESSION) || "null");
+    if (s && s.k && Date.now() - s.t < 8 * 3600e3) { key = s.k; isDefaultPw = !!s.d; enter(); }
+  } catch (e) {}
+  addEventListener("hashchange", () => { const h = location.hash.slice(1); if (key && h && h !== tab && document.querySelector(`[data-tab="${h}"]`)) { tab = h; render(); } });
+})();
+</script>
+</body>
+</html>
