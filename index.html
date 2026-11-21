@@ -570,7 +570,7 @@ footer{border-top:1px solid var(--line);padding:36px 0;color:var(--muted);font-s
         <button type="button" data-inc aria-label="زيدي ${esc(c.name)}">${I("plus")}</button>
       </div>`).join("");
     $("f-region").innerHTML = `<option value="">اختاري…</option>` + D.regions.map((r, i) => `<option value="${i}">${esc(r.name)}${r.fee == null || r.fee === "" ? "" : " (+" + esc(r.fee) + " " + esc(cur) + ")"}</option>`).join("");
-    $("payOpts").innerHTML = S.payments.map((p, i) => `<label><input type="radio" name="payment" value="${esc(p)}" ${i === 0 ? "checked" : ""}>${I(i === 0 ? "wallet" : "shield")}${esc(p)}</label>`).join("");
+    $("payOpts").innerHTML = S.payments.map((p, i) => `<label><input type="radio" name="payment" value="${esc(p)}" ${i === 0 ? "checked" : ""}>${I("wallet")}${esc(p)}${S.payments.length === 1 ? ` <span style="font-weight:500;color:var(--muted);margin-inline-start:auto">نقدًا لما يوصلك الطلب</span>` : ""}</label>`).join("");
     $("trust").innerHTML = `<span>${I("truck")}توصيل لكل فلسطين</span><span>${I("wallet")}${esc(S.payments.join(" أو "))}</span><span>${I("phone")}بنتواصل معك لتأكيد الطلب</span>`;
 
     // FAQ

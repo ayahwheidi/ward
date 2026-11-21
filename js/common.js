@@ -95,14 +95,25 @@
   W.saveLocalSettings = (s) => W.store.set(LS_SETTINGS, s);
   W.clearLocalSettings = () => W.store.del(LS_SETTINGS);
   /* بترجع الإعدادات فورًا من النسخة المحلية، وبتستدعي onRemote لما توصل النسخة من السيرفر */
+  /* الدفع عند الاستلام فقط: بيشيل أي ذكر للفيزا/البطاقات من المحتوى، حتى لو كان محفوظ من قبل */
+  const VISA_RE = /\s*(?:،|,)?\s*(?:أو|و)\s*(?:بال|ب)?(?:فيزا|بطاقة|بطاقات|visa)[^.،\n•]*/gi;
+  W.cleanSettings = function (S) {
+    if (!S || typeof S !== "object") return S;
+    const fix = (v) => typeof v === "string" ? v.replace(VISA_RE, "").replace(/\s{2,}/g, " ").trim() : Array.isArray(v) ? v.map(fix) : v && typeof v === "object" ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, fix(x)])) : v;
+    const out = fix(S);
+    out.payments = (Array.isArray(S.payments) ? S.payments : []).filter((p) => !/فيزا|بطاق|visa/i.test(String(p)));
+    if (!out.payments.length) out.payments = ["الدفع عند الاستلام"];
+    (out.faq || []).forEach((f) => { if (/كيف بدفع|طريقة الدفع/.test(f.q || "")) f.a = "الدفع نقدًا عند الاستلام، لما يوصلك الطلب."; });
+    return out;
+  };
   W.loadSettings = function (onRemote) {
     const local = W.localSettings();
-    const now = W.merge(W.defaults(), local && local.data ? local.data : null);
+    const now = W.cleanSettings(W.merge(W.defaults(), local && local.data ? local.data : null));
     if (W.hasApi()) {
       W.api.get("settings").then((r) => {
         if (r && r.ok && r.settings) {
           W.saveLocalSettings({ data: r.settings, from: "server", at: Date.now() });
-          onRemote && onRemote(W.merge(W.defaults(), r.settings));
+          onRemote && onRemote(W.cleanSettings(W.merge(W.defaults(), r.settings)));
         }
       }).catch(() => {});
     }

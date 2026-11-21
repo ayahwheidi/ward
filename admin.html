@@ -289,7 +289,13 @@ pre{padding:14px;overflow:auto;white-space:pre-wrap;word-break:break-all}
     render();
     await loadOrders();
     // أول ربط بالسيرفر: انشري الإعدادات الافتراضية عشان الأسعار والتوصيل تنحسب صح
-    if (W.hasApi()) { try { const r = await W.api.get("settings"); if (r && r.ok && !r.settings) await persist(true); } catch (e) {} }
+    if (W.hasApi()) {
+      try {
+        const r = await W.api.get("settings");
+        if (r && r.ok && !r.settings) await persist(true);
+        else if (r && r.ok && /فيزا|بطاق|visa/i.test(JSON.stringify(r.settings)) && !dirty()) { S = W.cleanSettings(W.merge(W.defaults(), r.settings)); saved = W.clone(S); await persist(true); render(); } // تنظيف المحتوى القديم من الفيزا
+      } catch (e) {}
+    }
   }
 
   /* ---------- البيانات ---------- */
@@ -513,7 +519,7 @@ pre{padding:14px;overflow:auto;white-space:pre-wrap;word-break:break-all}
   function viewDelivery() {
     return `<div class="topbar"><h2>التوصيل والدفع</h2></div>
       ${listEditor("delivery.regions", "مناطق التوصيل", [["name", "المنطقة"], ["fee", "السعر (فاضي = يُحدد عند التأكيد)", { type: "nullnum" }]], { name: "", fee: null }, (r) => r.name)}
-      <div class="panel"><h3>${I("truck")}معلومات التوصيل</h3>${fld("delivery.time", "مدة التوصيل")}${fld("delivery.note", "ملاحظة التوصيل", { type: "textarea" })}${fld("payments", "طرق الدفع (كل سطر طريقة)", { type: "lines" })}</div>`;
+      <div class="panel"><h3>${I("truck")}معلومات التوصيل</h3>${fld("delivery.time", "مدة التوصيل")}${fld("delivery.note", "ملاحظة التوصيل", { type: "textarea" })}${fld("payments", "طريقة الدفع", { type: "lines", hint: "الموقع شغال بالدفع عند الاستلام فقط" })}</div>`;
   }
   function viewFaq() {
     return `<div class="topbar"><h2>الأسئلة والآراء</h2></div>
